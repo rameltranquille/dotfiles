@@ -30,11 +30,15 @@ colorscheme dracula
 
 " Neoterm
 nnoremap <F1> :Tnew<CR>
-nnoremap <F2> :Tclear<CR>  
-nnoremap <F3> :Tkill<CR>
-nnoremap <F4> :Ttoggle<CR>
+nnoremap <F2> :Tclose<CR>  
+nnoremap <F3> :Tclear<CR>  
+nnoremap <F4> :Tkill<CR>
+nnoremap <F5> :Ttoggle<CR>
 
 let g:neoterm_default_mod="botright"
+" let g:neoterm_size=":res -10"
+" let g:neoterm_keep_term_open=0
+
 
 
 " Airline
@@ -80,6 +84,8 @@ let g:tex_conceal='abdmg'
 
 autocmd Filetype tex nnoremap <buffer> <F12> :update<bar>VimtexCompile<CR>
 autocmd Filetype html nnoremap <buffer> <F12> :update<bar>!firefox %<CR>
+autocmd Filetype python nnoremap <buffer> <F12> :update<bar>:T 'python %'<CR>
+autocmd Filetype cpp nnoremap <buffer> <F10> :update<bar>:T % && T ./a.out<CR>
 
 au Filetype python set 
 	\ tabstop=4

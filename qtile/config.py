@@ -10,22 +10,15 @@ mod = "mod4"
 mod2 = "mod1"
 terminal = "alacritty"
 
-# colors - hex
-
 fg = "#F7BFC0"
 bg = "#0F161E"
 bg2 = "#45425C"
 alt = "#A29AC3"
 alt2 = "#FCDACE"
 alt3 = "#FB676E"
-
 black = "#000000"
 green = "#00ff00"
 red = "#ff0000"
-# grey = "#545454"
-# silver = "#69747C"
-# blue = "0000ff"
-# purple = "#6A0DAD"
 
 if time.localtime().tm_hour > 12:
     wp ="~/.config/qtile/wallpapers/skbvzdkr6ni61.jpg"
@@ -107,23 +100,16 @@ keys = [
 
 g1 = Group(
         "1st",
-        layout="Columns",
+        layout="MonadTall",
+        spawn=[
+            "firefox",
+            "alacritty -e newsboat",
+            "alacritty -e vim /home/ramel/schedule.md",
+            ]
         )
-
-g2 = Group(
-        "2nd",
-        )
-
-g3 = Group(
-        "game",
-        layout='max',
-        spawn='lutris'
-        )
-
-g4 = Group(
-        "dev",
-        spawn="alacritty -e vim"
-        )
+g2 = Group( "2nd")
+g3 = Group( "game", layout='max',)
+g4 = Group( "dev", spawn="alacritty -e vim")
 
 groups = [g1, g2, g3, g4]
 
@@ -147,15 +133,13 @@ for index, grp in enumerate(groups):
 
 
 layouts = [
-    layout.Columns(num_columns=2, border_focus=fg, border_width=3,
+    layout.Columns(num_columns=3, border_focus=fg, border_width=3,
         margin=5, border_normal=bg),
     layout.Max(),
     layout.MonadTall(num_columns=2, border_focus=fg, border_width=3,
         margin=5, border_normal=bg),
     layout.Bsp(num_columns=2, border_focus=fg, border_width=3,
         margin=5, border_normal=bg),
-    layout.Floating(num_columns=2, border_focus=fg, border_width=3,
-        margin=5, border_normal=bg)
 ]
 
 
@@ -192,10 +176,10 @@ class Stats(widget.base.InLoopPollText):
         freegb_perc = st.used / st.total * 100
         return "{}GB Free".format(round(freegb))
 
-
     def poll(self):
         stat = [self.get_cpuload(), self.get_storage(), self.get_temp(),]
         return " | ".join(stat)
+
 
 class Todo(widget.base.InLoopPollText):
 
@@ -205,11 +189,9 @@ class Todo(widget.base.InLoopPollText):
 
     def poll(self):
         main_task = os.system("todo | grep -a 1 | sed \'s/\\x1b\\[[0-9;]*m//g\' > /home/ramel/.config/qtile/list.txt")
-        # mt = subprocess.check_output("cat /home/ramel/.config/qtile/list.txt | ")
         fline = open("/home/ramel/.config/qtile/list.txt", "r").readline().rstrip()
-        fline = fline.lstrip("1 | ")
-        # fline = fline.lstrip()
-        # fline = fline.decode('utf-8')
+        for i in "1234567890":
+            fline = fline.lstrip("{} | ".format(i))
         return "task:" + fline
 
 
@@ -251,10 +233,10 @@ screens = [
                     widget.Net(format='{down}↓↑{up}'), sep,
                     widget.CPU(), sep,
                     Stats(), sep,
-                    # widget.Volume, sep,
                     widget.Memory(format='Mem: {MemPercent}%'), sep,
                     widget.PulseVolume(volume_app="pavucontrol"), sep,
                     Todo(), sep,
+                    # Ticky(),
 
                 ],
                 18,
@@ -267,7 +249,7 @@ screens = [
             top=bar.Bar(
                 [
                     widget.CurrentLayout(),
-                    widget.WindowName()
+                    widget.WindowName(),
                     ],
                 18
                 ),
@@ -277,9 +259,9 @@ screens = [
 ]
 
 
-# @hook.subscribe.startup_complete
-# def autostart():
-#     subprocess.run('/home/daewi/.config/qtile/autostart.sh')
+@hook.subscribe.startup_complete
+def autostart():
+    subprocess.run('/home/daewi/.config/qtile/autostart.sh')
 
 
 mouse = [
@@ -297,15 +279,5 @@ bring_front_click = False
 cursor_warp = False
 auto_fullscreen = True
 focus_on_window_activation = "smart"
-floating_layout = layout.Floating(float_rules=[
-    # Run the utility of `xprop` to see the wm class and name of an X client.
-    *layout.Floating.default_float_rules,
-    Match(wm_class='confirmreset'),  # gitk
-    Match(wm_class='makebranch'),  # gitk
-    Match(wm_class='maketag'),  # gitk
-    Match(wm_class='ssh-askpass'),  # ssh-askpass
-    Match(title='branchdialog'),  # gitk
-    Match(title='pinentry'),  # GPG key password entry
-])
 
 wmname = "QTILE"

@@ -5,12 +5,8 @@ HISTCONTROL=ignoreboth
 HISTSIZE=-1
 HISTFILESIZE=-1
 
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-PS1="\[\e[0;37m\][\[\e[0;32m\]\t\[\e[0;37m\]]\[\e[0;32m\]\u\[\e[0;32m\]@\[\e[0;33m\]\w \[\e[0;37m\]> \[\e[0m\]"
+# PS1="\[\e[0;37m\][\[\e[0;32m\]\t\[\e[0;37m\]]\[\e[0;32m\]\u\[\e[0;32m\]@\[\e[0;33m\]\w \[\e[0;37m\]> \[\e[0m\]"
+export PS1="[\[$(tput sgr0)\]\[\033[38;5;13m\]\T\[$(tput sgr0)\]]\[$(tput sgr0)\]\[\033[38;5;13m\]\u@\[$(tput sgr0)\]\[\033[38;5;10m\]\w\[$(tput sgr0)\]>\[$(tput sgr0)\]"""
 
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -22,15 +18,18 @@ fi
 
 alias la='ls -A'
 alias l='ls -CF'
-alias do='clear & yokadi t_list'
-alias yrm='yokadi t_remove'
-alias ya='yokadi t_add'
-alias sa='sudo apt'
-alias sai='sudo apt install'
+alias sp='sudo pacman'
+alias sps='sudo pacman -S'
 alias ex='exit'
 alias g='git'
-alias ymd='yokadi t_mark_done'
-alias btop='bpytop'
-alias stonk='./ticker.sh $(cat ~/.ticker.conf)'
-alias sc='watch -n 5 -t -c ./ticker.sh $(cat ~/.ticker.conf)'
 alias ll='ls -l'
+alias tda='todo add'
+alias tdr='todo rm'
+alias tde='todo edit'
+alias bpy='bpytop'
+alias lutris_perms="sudo sh -c 'sysctl -w abi.vsyscall32=0'"
+alias update_dots='cd ~/dotfiles && bash /home/ramel/dotfiles/backup_dots.sh'
+alias py='python'
+alias stonk='bash ~/scripts/ticker.sh BTC-USD ^GSPC DOW GC=F CL=F ^IXIC'
+alias smi='sudo make install'
+
