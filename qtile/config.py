@@ -1,4 +1,5 @@
 import os, subprocess, psutil, time
+from datetime import datetime
 
 from typing import List
 
@@ -218,6 +219,7 @@ screens = [
                         name_transform=lambda name: name.upper(),
                     ),
                     widget.Notify(foreground=alt3, foreground_urgent=alt2),
+                    # widget.Countdown(format='{H}h:{M}m:{S}s'),
                     widget.Clock(
                         format='%m-%d-%y %a %I:%M %p',
                         foreground=fg),
