@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 # compositor
 picom &
 # lutris permissions
-lutris_perm
+sudo sh -c 'sysctl -w abi.vsyscall32=0'
 

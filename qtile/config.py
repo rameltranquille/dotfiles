@@ -1,5 +1,6 @@
 import os, subprocess, psutil, time
 from datetime import datetime
+from suntime import Sun
 
 from typing import List
 
@@ -21,10 +22,23 @@ black = "#000000"
 green = "#00ff00"
 red = "#ff0000"
 
-if time.localtime().tm_hour > 12:
-    wp ="~/.config/qtile/wallpapers/skbvzdkr6ni61.jpg"
-else:
-    wp ="~/.config/qtile/wallpapers/87897.jpg"
+longi = 40.71
+lati = -74.00
+def solunar(longi, lati):
+    sun = Sun(longi, lati)
+    today_sr = sun.get_sunrise_time().hour - 5 # subtract 5 for UTC to EST
+    today_ss = sun.get_sunset_time().hour - 5
+    current_time = time.localtime().tm_hour
+    
+    sunout = current_time < today_ss and current_time > today_sr
+
+    if sunout:
+        wp ="~/.config/qtile/wallpapers/87897.jpg"
+    else:
+        wp ="~/.config/qtile/wallpapers/skbvzdkr6ni61.jpg"
+
+    return wp
+
 
 keys = [
     # Free Keys: q, e, t, y
@@ -104,7 +118,6 @@ g1 = Group(
         layout="MonadTall",
         spawn=[
             "firefox",
-            "alacritty -e newsboat",
             "alacritty -e vim /home/ramel/schedule.md",
             ]
         )
@@ -207,7 +220,7 @@ screens = [
                     widget.GroupBox(
                         active=fg,
                         inactive=bg,
-                        visible_groups = ["1st", "2nd", "game", "dev"],
+                        # visible_groups = ["1st", "2nd", "game", "dev"],
                         this_current_screen_border=alt3,
                         other_current_screen_border=alt3),
                     sep,
@@ -244,7 +257,7 @@ screens = [
                 18,
                 background=bg
                 ),
-            wallpaper=wp,
+            wallpaper=solunar(longi, lati),
             wallpaper_mode="fill"
             ),
         Screen(
@@ -255,7 +268,7 @@ screens = [
                     ],
                 18
                 ),
-            wallpaper=wp,
+            wallpaper=solunar(longi, lati),
             wallpaper_mode="fill"
             )
 ]
