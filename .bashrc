@@ -32,4 +32,6 @@ alias update_dots='cd ~/dotfiles && bash /home/ramel/dotfiles/backup_dots.sh'
 alias py='python'
 alias stonk='bash ~/scripts/ticker.sh BTC-USD ^GSPC DOW GC=F CL=F ^IXIC'
 alias smi='sudo make install'
-
+alias mb='xrandr --output DVI-D-0 --brightness 1 && xrandr --output HDMI-0 --brightness 1'
+alias lb='xrandr --output DVI-D-0 --brightness .5 && xrandr --output HDMI-0 --brightness .5'
+alias nb='xrandr --output DVI-D-0 --brightness .75 && xrandr --output HDMI-0 --brightness .75'

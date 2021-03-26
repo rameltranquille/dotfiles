@@ -74,27 +74,13 @@ keys = [
     Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen"),
 
     # Bottom Row: Spawning Apps (Z-M)
-    Key([mod], "m", lazy.spawn("dmenu_run_i"), desc="Flip windows in layout"),
     Key([mod], "z", lazy.spawn("spotify"), desc="Open Spotify"),
     Key([mod], "x", lazy.spawn("firefox"), desc="Open Firefox"),
-    Key([mod], "c", lazy.spawn("alacritty -e lf"), desc="Open lf"),
+    Key([mod], "c", lazy.spawn("passmenu"), desc="Open Passmenu"),
     Key([mod], "v", lazy.spawn("alacritty -e vim"), desc="Open vim"),
-    Key([mod], "b", lazy.spawn("alacritty -e htop"), desc="Open htop"),
+    Key([mod], "b", lazy.spawn("alacritty -e bpytop"), desc="Open htop"),
     Key([mod], "n", lazy.spawn("pavucontrol"), desc="spawn pavucontrol"),
-    # Key([mod], 'm', lazy.run_extension(extension.DmenuRun(dmenu_prompt="Run >",
-    #     dmenu_font="jetbrains mono",
-    #     background=bg,
-    #     foreground=fg,
-    #     selected_background=alt3,
-    #     selected_foreground=alt2,
-    #     # dmenu_height=18
-    #     ))),
-    # Key([mod], "m", lazy.spawncmd(), desc="spawn command using prompt"),
-
-    # Sound
-    # Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
-    # Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -c 0 sset Master 1- unmute")),
-    # Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -c 0 sset Master 1+ unmute")),
+    Key([mod], "m", lazy.spawn("dmenu_run_i"), desc="Run Dmenu_run_i"),
     # I, O, P: Volume
     Key([mod], "i", lazy.spawn('amixer -D pulse sset Master 5%+'),
         desc="Increase volume"),
@@ -102,7 +88,6 @@ keys = [
         desc="Decrease volume"),
     Key([mod], "p", lazy.spawn('amixer -q set IEC958 toggle'),
         desc="Mute and Unmute volume"),
-
     # Other
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
@@ -115,7 +100,7 @@ keys = [
 
 g1 = Group(
         "1st",
-        layout="MonadTall",
+        layout="Columns",
         spawn=[
             "firefox",
             "alacritty -e vim /home/ramel/schedule.md",
@@ -150,10 +135,10 @@ layouts = [
     layout.Columns(num_columns=3, border_focus=fg, border_width=3,
         margin=5, border_normal=bg),
     layout.Max(),
-    layout.MonadTall(num_columns=2, border_focus=fg, border_width=3,
-        margin=5, border_normal=bg),
-    layout.Bsp(num_columns=2, border_focus=fg, border_width=3,
-        margin=5, border_normal=bg),
+    # layout.MonadTall(num_columns=2, border_focus=fg, border_width=3,
+        # margin=5, border_normal=bg),
+    # layout.Bsp(num_columns=2, border_focus=fg, border_width=3,
+        # margin=5, border_normal=bg),
 ]
 
 

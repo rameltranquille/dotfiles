@@ -147,3 +147,4 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 hi Normal guibg=NONE ctermbg=NONE
+hi Comment ctermfg=32
