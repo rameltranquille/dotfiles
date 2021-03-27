@@ -6,7 +6,6 @@ let mapleader = ","
 
 call plug#begin('~/.vim/plugged')
 
-" Plug 'junegunn/vim-easy-align'
 Plug 'preservim/nerdtree'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -36,14 +35,11 @@ nnoremap <F4> :Tkill<CR>
 nnoremap <F5> :Ttoggle<CR>
 
 let g:neoterm_default_mod="botright"
-" let g:neoterm_size=":res -10"
-" let g:neoterm_keep_term_open=0
-
-
+let g:neoterm_size=10
+let g:neoterm_keep_term_open=0
 
 " Airline
 let g:airline_theme='molokai'
-
 let g:airline#extensions#syntastic#enabled=1
 let g:airline#extensions#fzf#enabled=1
 
@@ -58,15 +54,13 @@ let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 
 " fzf
 let g:fzf_preview_window = ['right:40%:hidden', 'ctrl-/']
-
-" Easy Align
-nmap ga <Plug>(EasyAlign)
+nnoremap 'g  :Rg<CR>
+nnoremap <C-f> :FZF<CR>
 
 " Nerdtree
 nnoremap <C-n> :NERDTreeToggle<CR>
 nnoremap <leader>n :NERDTreeFocus<CR>
 " autocmd VimEnter * NERDTree | wincmd p
-
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
     \ quit | endif
 
@@ -85,7 +79,7 @@ let g:tex_conceal='abdmg'
 autocmd Filetype tex nnoremap <buffer> <F12> :update<bar>VimtexCompile<CR>
 autocmd Filetype html nnoremap <buffer> <F12> :update<bar>!firefox %<CR>
 autocmd Filetype python nnoremap <buffer> <F12> :update<bar>:T 'python %'<CR>
-autocmd Filetype cpp nnoremap <buffer> <F10> :update<bar>:T % && T ./a.out<CR>
+autocmd Filetype cpp nnoremap <buffer> <F10> :update<bar>:T g++ -std=c++11 -Wall % -o test<CR>
 
 au Filetype python set 
 	\ tabstop=4
@@ -99,8 +93,7 @@ au Filetype html set
 	\ shiftwidth=2
 
 au Filetype css set 
-	\ tabstop=2
-	\ softtabstop=2
+	\ tabstop=2 \ softtabstop=2
 	\ shiftwidth=2 
 
 au Filetype cpp set 

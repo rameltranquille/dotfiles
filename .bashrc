@@ -16,6 +16,10 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
+bind '"\C-o":"open_with_fzf\n"'
+bind '"\C-f":"cd_with_fzf\n"'
+bind '"\C-v":"vim\n"'
+
 alias la='ls -A'
 alias l='ls -CF'
 alias sp='sudo pacman'
@@ -23,10 +27,6 @@ alias sps='sudo pacman -S'
 alias ex='exit'
 alias g='git'
 alias ll='ls -l'
-alias tda='todo add'
-alias tdr='todo rm'
-alias tde='todo edit'
-alias bpy='bpytop'
 alias lutris_perms="sudo sh -c 'sysctl -w abi.vsyscall32=0'"
 alias update_dots='cd ~/dotfiles && bash /home/ramel/dotfiles/backup_dots.sh'
 alias py='python'
@@ -35,3 +35,16 @@ alias smi='sudo make install'
 alias mb='xrandr --output DVI-D-0 --brightness 1 && xrandr --output HDMI-0 --brightness 1'
 alias lb='xrandr --output DVI-D-0 --brightness .5 && xrandr --output HDMI-0 --brightness .5'
 alias nb='xrandr --output DVI-D-0 --brightness .75 && xrandr --output HDMI-0 --brightness .75'
+alias comp='cp -f /home/ramel/notebook/competitiveprogramming/template.cpp challenge.cpp && vim -n challenge.cpp'
+alias compy='cp -f ~/notebook/competitiveprogramming/template.py challenge.py && vim -n challenge.py'
+alias sex='./test'
+
+open_with_fzf() {
+	    fd -t f -H -I | fzf -m --preview="xdg-mime query default {}" | xargs -ro -d "\n" xdg-open 2>&-
+	    
+}
+cd_with_fzf() {
+	    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)"
+	    
+}
+

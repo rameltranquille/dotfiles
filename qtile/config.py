@@ -76,10 +76,10 @@ keys = [
     # Bottom Row: Spawning Apps (Z-M)
     Key([mod], "z", lazy.spawn("spotify"), desc="Open Spotify"),
     Key([mod], "x", lazy.spawn("firefox"), desc="Open Firefox"),
-    Key([mod], "c", lazy.spawn("passmenu"), desc="Open Passmenu"),
+    Key([mod], "c", lazy.spawn("pavucontrol"), desc="spawn pavucontrol"),
     Key([mod], "v", lazy.spawn("alacritty -e vim"), desc="Open vim"),
     Key([mod], "b", lazy.spawn("alacritty -e bpytop"), desc="Open htop"),
-    Key([mod], "n", lazy.spawn("pavucontrol"), desc="spawn pavucontrol"),
+    Key([mod], "n", lazy.spawn("passmenu"), desc="Open Passmenu"),
     Key([mod], "m", lazy.spawn("dmenu_run_i"), desc="Run Dmenu_run_i"),
     # I, O, P: Volume
     Key([mod], "i", lazy.spawn('amixer -D pulse sset Master 5%+'),
