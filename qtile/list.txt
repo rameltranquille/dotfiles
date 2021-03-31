@@ -1,0 +1,9 @@
+1 | qfs zoom session 1-7
+10 | vimrc for cpp and python
+11 | kestenbaum appt
+12 | michael appt
+13 | add NYU dates to calendar
+14 | qtile mouse % widget
+15 | passport application
+16 | fix doda's room
+17 | order new glasses

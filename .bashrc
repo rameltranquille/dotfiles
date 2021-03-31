@@ -32,12 +32,15 @@ alias update_dots='cd ~/dotfiles && bash /home/ramel/dotfiles/backup_dots.sh'
 alias py='python'
 alias stonk='bash ~/scripts/ticker.sh BTC-USD ^GSPC DOW GC=F CL=F ^IXIC'
 alias smi='sudo make install'
+alias pat='patch -p1 <'
 alias mb='xrandr --output DVI-D-0 --brightness 1 && xrandr --output HDMI-0 --brightness 1'
 alias lb='xrandr --output DVI-D-0 --brightness .5 && xrandr --output HDMI-0 --brightness .5'
 alias nb='xrandr --output DVI-D-0 --brightness .75 && xrandr --output HDMI-0 --brightness .75'
 alias comp='cp -f /home/ramel/notebook/competitiveprogramming/template.cpp challenge.cpp && vim -n challenge.cpp'
 alias compy='cp -f ~/notebook/competitiveprogramming/template.py challenge.py && vim -n challenge.py'
 alias sex='./test'
+alias tda='python3 /usr/local/bin/todo -a'
+alias dlm='youtube-dl --extract-audio --audio-format="best"'
 
 open_with_fzf() {
 	    fd -t f -H -I | fzf -m --preview="xdg-mime query default {}" | xargs -ro -d "\n" xdg-open 2>&-

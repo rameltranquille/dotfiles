@@ -65,15 +65,13 @@ keys = [
     Key([mod], "e", lazy.layout.grow_down(),
         desc="Grow window down"),
     Key([mod], "r", lazy.layout.grow_up(), desc="Grow window up"),
-    Key([mod], "t", lazy.layout.normalize(), desc="Reset all window sizes"),
-    Key([mod], "y", lazy.layout.maximize(), desc="Maximize current windows"),
 
     # Screens (A-F)
     Key([mod], "a", lazy.to_screen(0), desc="Move to first screen"),
     Key([mod], "s", lazy.to_screen(1), desc="Move to second screen"),
     Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen"),
 
-    # Bottom Row: Spawning Apps (Z-M)
+    # Bottom Row: Spawning Apps (Z-M) + (T)
     Key([mod], "z", lazy.spawn("spotify"), desc="Open Spotify"),
     Key([mod], "x", lazy.spawn("firefox"), desc="Open Firefox"),
     Key([mod], "c", lazy.spawn("pavucontrol"), desc="spawn pavucontrol"),
@@ -81,6 +79,8 @@ keys = [
     Key([mod], "b", lazy.spawn("alacritty -e bpytop"), desc="Open htop"),
     Key([mod], "n", lazy.spawn("passmenu"), desc="Open Passmenu"),
     Key([mod], "m", lazy.spawn("dmenu_run_i"), desc="Run Dmenu_run_i"),
+    Key([mod], "t", lazy.spawn("dmenu_todo"), desc="Open dmenu todolist"),
+    Key([mod], "y", lazy.spawn("dmenu_notetaker"), desc="Open dmenu notetaker script"),
     # I, O, P: Volume
     Key([mod], "i", lazy.spawn('amixer -D pulse sset Master 5%+'),
         desc="Increase volume"),
@@ -217,7 +217,7 @@ screens = [
                         name_transform=lambda name: name.upper(),
                     ),
                     widget.Notify(foreground=alt3, foreground_urgent=alt2),
-                    # widget.Countdown(format='{H}h:{M}m:{S}s'),
+                    widget.Cmus(),
                     widget.Clock(
                         format='%m-%d-%y %a %I:%M %p',
                         foreground=fg),
