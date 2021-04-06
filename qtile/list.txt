@@ -1,9 +1,13 @@
-1 | qfs zoom session 1-7
-10 | vimrc for cpp and python
-11 | kestenbaum appt
-12 | michael appt
-13 | add NYU dates to calendar
-14 | qtile mouse % widget
-15 | passport application
-16 | fix doda's room
-17 | order new glasses
+1 | scholarship session
+10 | order new glasses
+11 | search for elective
+12 | pythonQuiz.py
+13 | reinstall YCM
+14 | review vectors and tuples in C++
+15 | nyu finaid
+16 | find jiujitsu for april and may
+17 | review calendar for April
+18 | cprogramming inheritance and classes
+19 | cprogramming templates in cpp
+21 | search for stewart calculus textbook and create calculus course
+31 | AtourofC++ pointers chapter

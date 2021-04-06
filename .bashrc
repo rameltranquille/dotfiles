@@ -16,7 +16,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-bind '"\C-o":"open_with_fzf\n"'
 bind '"\C-f":"cd_with_fzf\n"'
 bind '"\C-v":"vim\n"'
 
@@ -40,12 +39,8 @@ alias comp='cp -f /home/ramel/notebook/competitiveprogramming/template.cpp chall
 alias compy='cp -f ~/notebook/competitiveprogramming/template.py challenge.py && vim -n challenge.py'
 alias sex='./test'
 alias tda='python3 /usr/local/bin/todo -a'
-alias dlm='youtube-dl --extract-audio --audio-format="best"'
+alias dlm='youtube-dl --extract-audio --audio-format mp3'
 
-open_with_fzf() {
-	    fd -t f -H -I | fzf -m --preview="xdg-mime query default {}" | xargs -ro -d "\n" xdg-open 2>&-
-	    
-}
 cd_with_fzf() {
 	    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)"
 	    

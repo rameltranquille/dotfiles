@@ -1,29 +1,32 @@
 import os, subprocess, psutil, time
 from datetime import datetime
+from get_weather import get_weather
 from suntime import Sun
-
 from typing import List
-
 from libqtile import bar, layout, widget, hook, extension
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, Match, Screen, Key, Group
 from libqtile.lazy import lazy
 
-mod = "mod4"
-mod2 = "mod1"
 terminal = "alacritty"
 
-fg = "#F7BFC0"
-bg = "#0F161E"
-bg2 = "#45425C"
-alt = "#A29AC3"
-alt2 = "#FCDACE"
-alt3 = "#FB676E"
-black = "#000000"
-green = "#00ff00"
-red = "#ff0000"
+class Colorscheme:
+    fg = "#F7BFC0"
+    bg = "#0F161E"
+    bg2 = "#45425C"
+    alt = "#A29AC3"
+    alt2 = "#FCDACE"
+    alt3 = "#FB676E"
+    ## Standard Colors
+    black = "#000000"
+    green = "#00ff00"
+    red = "#ff0000"
+    white = "#ffffff"
 
-longi = 40.71
-lati = -74.00
+###############################
+### Solunar Function
+###############################
+
+longi, lati =  40.71, -74.00
 def solunar(longi, lati):
     sun = Sun(longi, lati)
     today_sr = sun.get_sunrise_time().hour - 5 # subtract 5 for UTC to EST
@@ -36,121 +39,114 @@ def solunar(longi, lati):
         wp ="~/.config/qtile/wallpapers/87897.jpg"
     else:
         wp ="~/.config/qtile/wallpapers/skbvzdkr6ni61.jpg"
-
     return wp
 
+###############################
+### Groups
+###############################
+
+g1 = Group("1st",spawn=["firefox","alacritty"])
+g2 = Group("2nd")
+g3 = Group("3rd")
+g4 = Group("Music", spawn="alacritty -e cmus")
+g5 = Group("Study", spawn=["zathura ~/books/cpphandbook.pdf", "code"])
+g6 = Group("Stonks", spawn="tastyworks")
+
+
+groups = [g1, g2, g3, g4, g5, g6]
+
+###############################
+### KEYS
+###############################
+mod = "mod4"
+mod2 = "mod1"
+
+class Command:
+    vim = "alacritty -e vim"
+    bpytop = "alacritty -e bpytop"
+    open_with_fzf = "alacritty -e open_with_fzf"
+    volume_up = "amixer -D pulse sset Master 5%+"
+    volume_down = "amixer -D pulse sset Master 5%-"
+    volume_toggle = "amixer -q set IEC958 toggle"
+    dmenu_run_i = "dmenu_run_i"
+    dmenu_notetaker = "dmenu_notetaker"
 
 keys = [
-    # Free Keys: q, e, t, y
-    Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
-    Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
-    Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
-    Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
-    Key([mod], "g", lazy.layout.next(),
-        desc="Move window focus to other window"),
+    # Free Keys: z, d, 
+    Key([mod], "h", lazy.layout.left()),
+    Key([mod], "l", lazy.layout.right()),
+    Key([mod], "j", lazy.layout.down()),
+    Key([mod], "k", lazy.layout.up()),
+    Key([mod], "g", lazy.layout.next()),
+    Key([mod, "shift"], "h", lazy.layout.shuffle_left()),
+    Key([mod, "shift"], "l", lazy.layout.shuffle_right()),
+    Key([mod, "shift"], "j", lazy.layout.shuffle_down()),
+    Key([mod, "shift"], "k", lazy.layout.shuffle_up()),
+    Key([mod], "q", lazy.layout.grow_left()),
+    Key([mod], "w", lazy.layout.grow_right()),
+    Key([mod], "e", lazy.layout.grow_down()),
+    Key([mod], "r", lazy.layout.grow_up()),
 
-    Key([mod, "shift"], "h", lazy.layout.shuffle_left(),
-        desc="Move window to the left"),
-    Key([mod, "shift"], "l", lazy.layout.shuffle_right(),
-        desc="Move window to the right"),
-    Key([mod, "shift"], "j", lazy.layout.shuffle_down(),
-        desc="Move window down"),
-    Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
-
-    # Sizing (Q-Y)
-    Key([mod], "q", lazy.layout.grow_left(),
-        desc="Grow window to the left"),
-    Key([mod], "w", lazy.layout.grow_right(),
-        desc="Grow window to the right"),
-    Key([mod], "e", lazy.layout.grow_down(),
-        desc="Grow window down"),
-    Key([mod], "r", lazy.layout.grow_up(), desc="Grow window up"),
-
-    # Screens (A-F)
-    Key([mod], "a", lazy.to_screen(0), desc="Move to first screen"),
-    Key([mod], "s", lazy.to_screen(1), desc="Move to second screen"),
-    Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen"),
+    Key([mod], "a", lazy.to_screen(0)),
+    Key([mod], "s", lazy.to_screen(1)),
+    Key([mod], "f", lazy.window.toggle_fullscreen()),
 
     # Bottom Row: Spawning Apps (Z-M) + (T)
-    Key([mod], "z", lazy.spawn("spotify"), desc="Open Spotify"),
-    Key([mod], "x", lazy.spawn("firefox"), desc="Open Firefox"),
-    Key([mod], "c", lazy.spawn("pavucontrol"), desc="spawn pavucontrol"),
-    Key([mod], "v", lazy.spawn("alacritty -e vim"), desc="Open vim"),
-    Key([mod], "b", lazy.spawn("alacritty -e bpytop"), desc="Open htop"),
-    Key([mod], "n", lazy.spawn("passmenu"), desc="Open Passmenu"),
-    Key([mod], "m", lazy.spawn("dmenu_run_i"), desc="Run Dmenu_run_i"),
-    Key([mod], "t", lazy.spawn("dmenu_todo"), desc="Open dmenu todolist"),
-    Key([mod], "y", lazy.spawn("dmenu_notetaker"), desc="Open dmenu notetaker script"),
+    Key([mod], "z", lazy.spawn("pavucontrol")),
+    Key([mod], "x", lazy.spawn("firefox")),
+    Key([mod], "c", lazy.spawn(Command.open_with_fzf)),
+    Key([mod], "v", lazy.spawn(Command.vim)),
+    Key([mod], "b", lazy.spawn(Command.bpytop)),
     # I, O, P: Volume
-    Key([mod], "i", lazy.spawn('amixer -D pulse sset Master 5%+'),
-        desc="Increase volume"),
-    Key([mod], "o", lazy.spawn('amixer -D pulse sset Master 5%-'),
-        desc="Decrease volume"),
-    Key([mod], "p", lazy.spawn('amixer -q set IEC958 toggle'),
-        desc="Mute and Unmute volume"),
-    # Other
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "space", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod], "i", lazy.spawn(Command.volume_up)),
+    Key([mod], "o", lazy.spawn(Command.volume_down)),
+    Key([mod], "p", lazy.spawn(Command.volume_toggle)),
 
-    Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
-    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-
+    Key([mod], "Return", lazy.spawn(terminal)),
+    Key([mod], "Tab", lazy.next_layout()),
+    Key([mod], "space", lazy.window.kill()),
+    Key([mod, "control"], "r", lazy.restart()),
+    Key([mod, "control"], "q", lazy.shutdown()),
+    ### Dmenu Keys
+    Key([mod], "m", lazy.spawn(Command.dmenu_run_i)),
+    # Key([mod], "y", lazy.spawn(Command.dmenu_notetaker)),
+    Key([mod], "n", lazy.run_extension(extension.Dmenu(
+        dmenu_command = "passmenu",
+        foreground=Colorscheme.bg2,
+        selected_background=Colorscheme.alt))),
+    Key([mod], "t", lazy.run_extension(extension.Dmenu(
+        dmenu_command = "dmenu_todo",
+        foreground=Colorscheme.alt2,
+        selected_background=Colorscheme.green))),
+    Key([mod], "y", lazy.run_extension(extension.Dmenu(
+        dmenu_command = "dmenu_notetaker"))),
 ]
 
-g1 = Group(
-        "1st",
-        layout="Columns",
-        spawn=[
-            "firefox",
-            "alacritty -e vim /home/ramel/schedule.md",
-            ]
-        )
-g2 = Group( "2nd")
-g3 = Group( "game", layout='max',)
-g4 = Group( "dev", spawn="alacritty -e vim")
-
-groups = [g1, g2, g3, g4]
-
 for index, grp in enumerate(groups):
-
     keys.extend([
-        # mod1 + letter of group = switch to group
         Key([mod], str(index+1), lazy.group[grp.name].toscreen(),
             desc="Switch to group {}".format(grp.name)),
-
-        # mod1 + shift + letter of group = switch to
-        # & move focused window to group
         Key([mod, "shift"], str(index+1), lazy.window.togroup(grp.name),
             desc="move focused window to group".format(grp.name)),
-
         Key([mod, "control"], str(index+1), lazy.window.togroup(
             grp.name,
             switch_group=True),
             desc="moved focused window to group and switch to group")
     ])
 
+###############################
+### LAYOUTS
+###############################
 
 layouts = [
-    layout.Columns(num_columns=3, border_focus=fg, border_width=3,
-        margin=5, border_normal=bg),
-    layout.Max(),
-    # layout.MonadTall(num_columns=2, border_focus=fg, border_width=3,
-        # margin=5, border_normal=bg),
-    # layout.Bsp(num_columns=2, border_focus=fg, border_width=3,
-        # margin=5, border_normal=bg),
+    layout.Columns(num_columns=3, border_focus=Colorscheme.alt3, border_width=3,
+        margin=5),
+    layout.Max()
 ]
 
-
-widget_defaults = dict(
-    background=bg,
-    foreground=fg,
-    font='jetbrains mono light',
-    fontsize=10,
-    padding=3,
-)
-extension_defaults = widget_defaults.copy()
-
+###############################
+### CUSTOM WIDGETS
+###############################
 
 class Stats(widget.base.InLoopPollText):
 
@@ -179,7 +175,6 @@ class Stats(widget.base.InLoopPollText):
         stat = [self.get_cpuload(), self.get_storage(), self.get_temp(),]
         return " | ".join(stat)
 
-
 class Todo(widget.base.InLoopPollText):
 
     def __init__(self, **config):
@@ -187,81 +182,89 @@ class Todo(widget.base.InLoopPollText):
         self.update_interval = 1
 
     def poll(self):
-        main_task = os.system("todo | grep -a 1 | sed \'s/\\x1b\\[[0-9;]*m//g\' > /home/ramel/.config/qtile/list.txt")
-        fline = open("/home/ramel/.config/qtile/list.txt", "r").readline().rstrip()
+        main_task = subprocess.check_output("todo -l 1", shell=True)
+        with open("/home/ramel/.todolist") as todolist:
+            fline = todolist.readline()
         for i in "1234567890":
             fline = fline.lstrip("{} | ".format(i))
-        return "task:" + fline
+        return "task:" + fline.rstrip('\n')
 
+class Weather(widget.base.ThreadPoolText):
+
+    def __init__(self, **config):
+        widget.base.ThreadPoolText.__init__(self, "", **config)
+        self.update_interval = 10000
+
+    def poll(self):
+        weather_string = get_weather()
+        return weather_string
+
+###############################
+### WIDGETS / SCREENS / BAR
+###############################
+
+widget_defaults = dict(
+    foreground=Colorscheme.fg,
+    background=Colorscheme.bg,
+    font='jetbrains mono light',
+    fontsize=10,
+    padding=3,
+)
+
+extension_defaults = widget_defaults.copy()
 
 sep = widget.Sep(linewidth=1, size_percent=80)
 
 screens = [
-        Screen(
-            top=bar.Bar(
-                [
+        Screen(top=bar.Bar([
                     widget.CurrentLayout(), sep,
-                    widget.Prompt(prompt="Run: "),
                     widget.GroupBox(
-                        active=fg,
-                        inactive=bg,
-                        # visible_groups = ["1st", "2nd", "game", "dev"],
-                        this_current_screen_border=alt3,
-                        other_current_screen_border=alt3),
+                        highlight_method="line",
+                        active=Colorscheme.fg,
+                        this_current_screen_border=Colorscheme.alt3,
+                        other_current_screen_border=Colorscheme.alt3),
                     sep,
                     widget.WindowName(),
                     widget.Chord(
                         chords_colors={
-                            'launch': (black, green),
+                            'launch': (Colorscheme.black, Colorscheme.green),
                         },
                         name_transform=lambda name: name.upper(),
                     ),
-                    widget.Notify(foreground=alt3, foreground_urgent=alt2),
+                    widget.Notify(foreground=Colorscheme.alt3,
+                        foreground_urgent=Colorscheme.alt2),
                     widget.Cmus(),
-                    widget.Clock(
-                        format='%m-%d-%y %a %I:%M %p',
-                        foreground=fg),
+                    widget.Clock(format='%m-%d-%y %a %I:%M %p'),
                     widget.Systray(),
                     widget.CurrentScreen(
-                        active_color=alt,
-                        inactive_color=alt),
-                    ],
-                18
+                        active_color=Colorscheme.alt,
+                        inactive_color=Colorscheme.alt),
+                    ], 18
                 ),
-            bottom=bar.Bar(
-                [
+            bottom=bar.Bar([
                     widget.Net(format='{down}↓↑{up}'), sep,
                     widget.CPU(), sep,
                     Stats(), sep,
                     widget.Memory(format='Mem: {MemPercent}%'), sep,
                     widget.PulseVolume(volume_app="pavucontrol"), sep,
                     Todo(), sep,
-                    # Ticky(),
-
-                ],
-                18,
-                background=bg
+                    Weather(), sep
+                    # widget.NvidiaSensors(),
+                    ], 18,
+                    background=Colorscheme.bg
                 ),
             wallpaper=solunar(longi, lati),
             wallpaper_mode="fill"
             ),
-        Screen(
-            top=bar.Bar(
-                [
+        Screen(top=bar.Bar([
                     widget.CurrentLayout(),
                     widget.WindowName(),
-                    ],
-                18
+                    ], 18
                 ),
             wallpaper=solunar(longi, lati),
             wallpaper_mode="fill"
             )
 ]
-
-
-@hook.subscribe.startup_complete
-def autostart():
-    subprocess.run('/home/daewi/.config/qtile/autostart.sh')
 
 
 mouse = [
