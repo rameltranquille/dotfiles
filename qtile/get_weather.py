@@ -1,7 +1,7 @@
 import requests, json
 
 def get_weather():
-    api_key = "711118f2be0b368b06fe7dc9f288a0b3"
+    api_key_="1234567890"
     lat, lon= "40.73", "-73.93"
     base_url="https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&appid={api_key}"
     units = "&units=imperial"
